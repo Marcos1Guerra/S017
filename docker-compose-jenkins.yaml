@@ -1,0 +1,54 @@
+  # docker-compose.yaml
+  version: '3.8'
+  services:
+    jenkins_maven: #nome (qualquer)
+      image: chrisslima/s107_jenkins_v2  #definido a imagem
+      container_name: jenkins
+      privileged: true
+      user: root #privilegio
+      ports:
+       - 8080:8080 #portas definidas
+       - 50000:50000
+      volumes: #mapeamento 
+        - ./jenkins_compose/jenkins_configuration:/var/jenkins_home
+#      networks:
+#        - my_network
+
+    mongodb: #nome para imagem do mongoDB
+      image: mongo
+      ports:
+        - 27017:27017
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: root
+      volumes:
+        - /Users/user/Documents/mongodb:/data/db
+#      networks:
+#        - my_network
+    
+    mongo-express: #interface para acessar BD do mongo
+      image: mongo-express
+      restart: always
+      ports:
+        - 8081:8081
+      environment:
+        ME_CONFIG_MONGODB_ADMINUSERNAME: root
+        ME_CONFIG_MONGODB_ADMINPASSWORD: root
+        ME_CONFIG_MONGODB_SERVER: mongodb
+#      networks:
+#        - my_network
+
+# Exemplo de criação de um network para os onctainers
+#  networks:
+#    my_network:
+#      driver: bridge
+
+# O código abaixo é usado para subir um outro container a partir de um dockerfile.
+# Mude o nome e porta para refletir seu ambiente.
+
+# web:
+#   build:
+#     context: ./docker
+#     dockerfile: dockerfile
+#   ports:
+#     - "8082:8082"
